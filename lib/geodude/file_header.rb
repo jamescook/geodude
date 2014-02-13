@@ -13,5 +13,10 @@ module Geodude
     double_le  :zmax
     double_le  :mmin
     double_le  :mmax
+
+    # File length is expressed in 16 bit words
+    def size_in_bytes
+      ( file_length * 16 ) / 8
+    end
   end
 end
