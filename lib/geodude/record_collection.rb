@@ -36,7 +36,7 @@ module Geodude
     def each &block
       process_file
 
-      yield records
+      records.each &block
     end
 
     def count
@@ -73,8 +73,12 @@ module Geodude
       # used in the shape record
       byte = BinData::Int8.read(io.read(1))
       io.seek(-1, IO::SEEK_CUR)
+
+
       shape_factory(byte).new.tap do |shape_record|
-        shape_record.read(io.read(length))
+        if length.nonzero?
+          shape_record.read(io.read(length))
+        end
       end
     end
 

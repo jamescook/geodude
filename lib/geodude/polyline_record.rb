@@ -4,7 +4,8 @@ module Geodude
     box         :box
     uint32le    :num_parts
     uint32le    :num_points
-    part_array  :parts,  :initial_length => :num_parts #:read_until => lambda { array.size ==  num_parts }
+    #part_array  :parts,  :initial_length => :num_parts #:read_until => lambda { array.size ==  num_parts }
+    array       :parts,  :type => :uint32le, :initial_length => :num_parts #:read_until => lambda { array.size ==  num_parts }
     point_array :points, :initial_length => :num_points
 
     #Byte 0  Shape         Type       3      Integer 1 Little
