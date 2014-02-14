@@ -8,10 +8,11 @@ module Geodude
     attr_reader :io, :records
 
     SHAPE_TYPES = {
-      0   => NullShapeRecord,
-      1   => PointRecord,
-      3   => PolylineRecord,
-      5   => PolygonRecord
+      0  => NullShapeRecord,
+      1  => PointRecord,
+      3  => PolylineRecord,
+      5  => PolygonRecord,
+      23 => PolylineMRecord
 =begin
       8   => :MultiPointRecord,
       11  => :PointZRecord,
@@ -19,7 +20,6 @@ module Geodude
       15  => :PolygonZRecord,
       18  => :MultiPointZRecord,
       21  => :PointMRecord,
-      23  => :PolyLineMRecord,
       25  => :PolygonMRecord,
       28  => :MultiPointMRecord,
       31  => :MultiPatchRecord
@@ -93,7 +93,7 @@ module Geodude
     end
 
     def shape_factory(byte)
-      SHAPE_TYPES.fetch(byte, Geodude::UnknownRecord)
+      SHAPE_TYPES.fetch(byte.value, Geodude::UnknownRecord)
     end
   end
 end

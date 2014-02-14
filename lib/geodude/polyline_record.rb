@@ -15,5 +15,6 @@ module Geodude
     #Byte X  Points Points Point      NumPoints Little
 
     #Note: X = 44 + 4 * NumParts
+
   end
 end
