@@ -1,9 +1,6 @@
 module Geodude
   class RecordCollection
     include Enumerable
-    extend Forwardable
-
-    def_delegators :enumerator, :next
 
     attr_reader :io, :records
 
@@ -12,31 +9,34 @@ module Geodude
       1  => PointRecord,
       3  => PolylineRecord,
       5  => PolygonRecord,
-      23 => PolylineMRecord
-=begin
-      8   => :MultiPointRecord,
-      11  => :PointZRecord,
-      13  => :PolyLineZRecord,
-      15  => :PolygonZRecord,
-      18  => :MultiPointZRecord,
-      21  => :PointMRecord,
-      25  => :PolygonMRecord,
-      28  => :MultiPointMRecord,
-      31  => :MultiPatchRecord
-=end
+      8  => MultiPointRecord,
+      11 => PointZRecord,
+      13 => PolylineZRecord,
+      15 => PolygonZRecord,
+      18 => MultiPointZRecord,
+      21 => PointMRecord,
+      23 => PolylineMRecord,
+      25 => PolygonMRecord,
+      28 => MultiPointMRecord,
+      31 => MultiPatchRecord
     }
 
     def initialize(io)
       @io      = io
       @records = []
+
+      io.seek(100) if io.pos.zero? # Skip the file header if needed
+    end
+
+    def [](idx)
+      process_file if data_remaining?
+      records[idx]
     end
 
     def each &block
-      if no_data_remaining?
-        yield records
-      else
-        enumerator.each(&block)
-      end
+      process_file
+
+      yield records
     end
 
     def count

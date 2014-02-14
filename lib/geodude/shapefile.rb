@@ -13,9 +13,7 @@ module Geodude
     end
 
     def records
-      file_header if file.pos.zero?
-
-      RecordCollection.new(file)
+      @records ||= RecordCollection.new(file)
     end
   end
 end
