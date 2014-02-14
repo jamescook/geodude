@@ -1,17 +1,28 @@
 module Geodude
   class MultiPatchRecord < BinData::Record
-    int32le     :shape_type
-    box         :box
-    uint32le    :num_parts
-    uint32le    :num_points
-    part_array  :parts,   :initial_length => :num_parts
-    array       :part_types, :type => :uint32le, :initial_length => :num_parts
-    point_array :points,  :initial_length => :num_points
-    float_le    :z_min
-    float_le    :z_max
-    array       :z_array, :type => :float_le, :initial_length => :num_points
-    float_le    :m_min
-    float_le    :m_max
-    array       :m_array, :type => :float_le, :initial_length => :num_points
+    endian :little
+
+    uint32       :shape_type
+    box          :box
+    uint32       :num_parts
+    uint32       :num_points
+    part_array   :parts, :initial_length => :num_parts
+    array        :part_types, :type => :uint32le, :initial_length => :num_parts
+    point_array  :points, :initial_length => :num_points
+
+    double       :z_min
+    double       :z_max
+    array        :z_array, :type => :double_le, :initial_length => :num_points
+
+    count_bytes_remaining :bytes_remaining
+
+    double       :m_min, :onlyif => :has_m_data?
+    double       :m_max, :onlyif => :has_m_data?
+    array        :m_array, :type => :double_le, :initial_length => :num_points, :onlyif => :has_m_data?
+
+
+    def has_m_data?
+      bytes_remaining.nonzero?
+    end
   end
 end

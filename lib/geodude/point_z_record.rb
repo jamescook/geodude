@@ -1,9 +1,11 @@
 module Geodude
   class PointZRecord < BinData::Record
-    int32le  :shape_type
-    float_le :x
-    float_le :y
-    float_le :z
-    float_le :measure
+    endian :little
+
+    uint32 :shape_type, :assert => 11
+    double :x
+    double :y
+    double :z
+    double :measure
   end
 end

@@ -2,7 +2,7 @@ module Geodude
   class RecordCollection
     include Enumerable
 
-    attr_reader :io, :records
+    attr_reader :io, :records, :headers
 
     SHAPE_TYPES = {
       0  => NullShapeRecord,
@@ -24,6 +24,7 @@ module Geodude
     def initialize(io)
       @io      = io
       @records = []
+      @headers = []
 
       io.seek(100) if io.pos.zero? # Skip the file header if needed
     end
@@ -74,8 +75,7 @@ module Geodude
       byte = BinData::Int8.read(io.read(1))
       io.seek(-1, IO::SEEK_CUR)
 
-
-      shape_factory(byte).new.tap do |shape_record|
+      shape_factory(byte).new(:size => length).tap do |shape_record|
         if length.nonzero?
           shape_record.read(io.read(length))
         end
@@ -84,7 +84,7 @@ module Geodude
 
     def read_next_header
       Geodude::RecordHeader.new.tap do |header|
-        header.read(io.read(8))
+        headers.push header.read(io.read(8))
       end
     end
 

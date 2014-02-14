@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Geodude::Shapefile do
+describe Geodude::Shapefile::Reader do
   let(:fixture) { File.expand_path("spec/fixtures/test1.shp") }
   subject { described_class.new(fixture) }
 

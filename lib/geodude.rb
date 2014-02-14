@@ -24,8 +24,9 @@ require_relative "./geodude/multi_point_z_record"
 
 require_relative "./geodude/multi_patch_record"
 require_relative "./geodude/unknown_record"
-require_relative "./geodude/shapefile"
 require_relative "./geodude/record_collection"
+require_relative "./geodude/shapefile/reader"
+require_relative "./geodude/shapefile/writer"
 
 module Geodude
 end

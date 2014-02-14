@@ -1,8 +1,10 @@
 module Geodude
   class PointMRecord < BinData::Record
-    int32le   :shape_type
-    float_le  :x
-    float_le  :y
-    float_le  :m
+    endian :little
+
+    uint32  :shape_type
+    double  :x
+    double  :y
+    double  :m
   end
 end

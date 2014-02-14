@@ -1,19 +1,21 @@
 module Geodude
-  class Shapefile
-    attr_reader :file
+  module Shapefile
+    class Reader
+      attr_reader :file
 
-    def initialize(path)
-      @file = File.open(path, "rb")
-    end
-
-    def file_header
-      @file_header ||= Geodude::FileHeader.new.tap do |file_header|
-        file_header.read(file.read(100))
+      def initialize(path)
+        @file = File.open(path, "rb:ISO8859-1")
       end
-    end
 
-    def records
-      @records ||= RecordCollection.new(file)
+      def file_header
+        @file_header ||= Geodude::FileHeader.new.tap do |file_header|
+          file_header.read(file.read(100))
+        end
+      end
+
+      def records
+        @records ||= RecordCollection.new(file)
+      end
     end
   end
 end

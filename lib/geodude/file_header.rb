@@ -1,6 +1,6 @@
 module Geodude
   class FileHeader < BinData::Record
-    int32be    :file_code
+    uint32be    :file_code
     string     :unused, :read_length => 5 * 4 # bytes
     uint32be   :file_length
     uint32le   :version
