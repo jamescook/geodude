@@ -54,14 +54,6 @@ module Geodude
       end
     end
 
-    def enumerator
-      Enumerator.new do |enum|
-        loop do
-          enum.yield get_next_record
-        end
-      end
-    end
-
     def get_next_record
       header = read_next_header
       read_next_shape(header.content_length_in_bytes).tap do |record|
@@ -101,46 +93,3 @@ module Geodude
     end
   end
 end
-
-=begin
-# here I am learning how shape files are put together
-File.open("/Users/james/Downloads/tl_2013_us_rails/tl_2013_us_rails.shp", "r") do |file|
-  $FILE_HEADER = Geodude::FileHeader.new
-  $FILE_HEADER.read(file.read(100))
-
-  while !file.eof? do
-    record_header = Geodude::RecordHeader.new
-    record_header.read(file.read(8))
-    next_byte = BinData::Int8.read(file.read(1))
-
-    puts record_header.inspect
-    puts "next byte #{next_byte.inspect}"
-    puts "length #{record_header.content_length_in_bytes}"
-    file.seek(-1, IO::SEEK_CUR)
-
-    puts "pos #{file.pos}"
-    if next_byte == 0 
-      x = Geodude::NullShapeRecord.new
-      puts "NULL SHAPE RECORD: #{x}"
-    elsif next_byte == 1
-      x = Geodude::PointRecord.new
-      puts "POINT RECORD: #{x}"
-      x.read(file.read(12))
-    elsif next_byte == 3
-      x = Geodude::PolylineRecord.new
-      puts "content length in bytes: #{record_header.content_length_in_bytes}"
-      x.read(file.read(record_header.content_length_in_bytes ))
-      puts "POLYLINE RECORD: #{x}"
-    elsif next_byte == 8
-      x = Geodude::MultiPointRecord.new
-      puts "MULTI POINT RECORD: #{x}"
-      x.read(file.read(record_header.content_length))
-    else
-      puts "NYI #{next_byte}"
-      raise
-    end
-  end
-end
-=end
-
-
