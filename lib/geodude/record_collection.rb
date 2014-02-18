@@ -67,10 +67,10 @@ module Geodude
       byte = BinData::Int8.read(io.read(1))
       io.seek(-1, IO::SEEK_CUR)
 
-      shape_factory(byte).new(:size => length).tap do |shape_record|
-        if length.nonzero?
-          shape_record.read(io.read(length))
-        end
+      shape_factory(byte).new(:encoded => io.read(length),:size => length).tap do |shape_record|
+        #if length.nonzero?
+          #shape_record.read(io.read(length))
+        #end
       end
     end
 
