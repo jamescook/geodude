@@ -31,6 +31,7 @@ require_relative "./geodude/shapefile/reader"
 require_relative "./geodude/shapefile/writer"
 
 require_relative "./geodude/index/reader"
+require_relative "./geodude/index/writer"
 
 module Geodude
 end
